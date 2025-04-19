@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "displayName": "tagging-policy",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "Prevent Creating Any Resource doesn't has any tag",
+    "metadata": {
+      "version": "1.0.1",
+      "category": "Tags"
+    },
+    "parameters": {},
+    "policyRule": {
+      "if": {
+        "value": "[length(field('tags'))]",
+        "equals": 0
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}

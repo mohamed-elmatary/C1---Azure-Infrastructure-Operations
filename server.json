@@ -1,0 +1,38 @@
+{
+    "builders": [
+        {
+            "type": "azure-arm",
+            "client_id": "{{client_id}}",
+            "client_secret": "{{client_secret}}",
+            "subscription_id": "{{subscription_id}}",
+            "os_type": "Linux",
+            "image_publisher": "Canonical",
+            "image_offer": "UbuntuServer",
+            "image_sku": "18.04-LTS",
+            "managed_image_resource_group_name": "myResourceGroup",
+            "managed_image_name": "myPackerImage",
+            "azure_tags": {
+                "dept": "engineering"
+            },
+            "location": "eastus",
+            "vm_size": "Standard_B1s"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-get update",
+                "sudo apt-get upgrade -y",
+                "sudo apt-get install -y busybox",
+                "sudo mkdir -p /var/www",
+                "echo 'Hello, World!' | sudo tee /var/www/index.html",
+                "echo '#!/bin/sh -e' | sudo tee /etc/rc.local",
+                "echo 'nohup /bin/busybox httpd -f -p 80 -h /var/www &' | sudo tee -a /etc/rc.local",
+                "echo 'exit 0' | sudo tee -a /etc/rc.local",
+                "sudo chmod +x /etc/rc.local"
+            ],
+            "inline_shebang": "/bin/sh -x"
+        }
+    ]
+}
